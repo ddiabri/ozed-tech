@@ -26,12 +26,13 @@ class TicketEmailNotification:
         plain_message = strip_tags(html_message)
 
         # Send to customer
-        if ticket.customer.email:
+        customer_email = TicketEmailNotification._get_customer_email(ticket.customer)
+        if customer_email:
             TicketEmailNotification._send_email(
                 subject=subject,
                 message=plain_message,
                 html_message=html_message,
-                recipient_list=[ticket.customer.email],
+                recipient_list=[customer_email],
             )
 
         # Send to assigned user
@@ -59,12 +60,13 @@ class TicketEmailNotification:
         plain_message = strip_tags(html_message)
 
         # Send to customer
-        if ticket.customer.email:
+        customer_email = TicketEmailNotification._get_customer_email(ticket.customer)
+        if customer_email:
             TicketEmailNotification._send_email(
                 subject=subject,
                 message=plain_message,
                 html_message=html_message,
-                recipient_list=[ticket.customer.email],
+                recipient_list=[customer_email],
             )
 
     @staticmethod
@@ -105,12 +107,13 @@ class TicketEmailNotification:
         plain_message = strip_tags(html_message)
 
         # Send to customer
-        if ticket.customer.email:
+        customer_email = TicketEmailNotification._get_customer_email(ticket.customer)
+        if customer_email:
             TicketEmailNotification._send_email(
                 subject=subject,
                 message=plain_message,
                 html_message=html_message,
-                recipient_list=[ticket.customer.email],
+                recipient_list=[customer_email],
             )
 
         # Send to assigned user
@@ -134,8 +137,9 @@ class TicketEmailNotification:
                 recipients.append(ticket.created_by.email)
         else:
             recipients = []
-            if ticket.customer.email:
-                recipients.append(ticket.customer.email)
+            customer_email = TicketEmailNotification._get_customer_email(ticket.customer)
+            if customer_email:
+                recipients.append(customer_email)
             if ticket.assigned_to and ticket.assigned_to.email:
                 recipients.append(ticket.assigned_to.email)
 
@@ -229,6 +233,21 @@ class TicketEmailNotification:
                 html_message=html_message,
                 recipient_list=list(set(recipients)),
             )
+
+    @staticmethod
+    def _get_customer_email(customer):
+        """Get primary contact email for customer."""
+        # Try to get primary contact
+        primary_contact = customer.contacts.filter(is_primary=True, is_active=True, email__isnull=False).first()
+        if primary_contact and primary_contact.email:
+            return primary_contact.email
+
+        # Fallback to any active contact with email
+        any_contact = customer.contacts.filter(is_active=True, email__isnull=False).first()
+        if any_contact and any_contact.email:
+            return any_contact.email
+
+        return None
 
     @staticmethod
     def _send_email(subject, message, html_message, recipient_list):
