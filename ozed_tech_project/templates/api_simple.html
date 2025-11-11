@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ view_name }} - Ozed Tech API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .nav {
+            background: #f8f9fa;
+            padding: 15px 30px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            background: white;
+            border: 1px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .auth-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .data-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+
+        .json-key {
+            color: #66d9ef;
+        }
+
+        .json-string {
+            color: #a6e22e;
+        }
+
+        .json-number {
+            color: #ae81ff;
+        }
+
+        .json-boolean {
+            color: #fd971f;
+        }
+
+        .json-null {
+            color: #f92672;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .pagination a:hover {
+            background: #764ba2;
+        }
+
+        .pagination .disabled {
+            background: #ccc;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ view_name }}</h1>
+            {% if view_description %}
+                <p>{{ view_description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="nav">
+            <a href="/api/">🏠 Home</a>
+            <a href="?format=json">📄 JSON</a>
+            <a href="/admin/">⚙️ Admin</a>
+            {% if user.is_authenticated %}
+                <a href="/api-auth/logout/">🚪 Logout ({{ user.username }})</a>
+            {% else %}
+                <a href="/api-auth/login/">🔐 Login</a>
+            {% endif %}
+        </div>
+
+        <div class="content">
+            {% if user.is_authenticated %}
+                <div class="auth-info">
+                    ✓ Authenticated as <strong>{{ user.username }}</strong>
+                </div>
+            {% else %}
+                <div class="auth-info" style="background: #fff3cd; border-left-color: #ffc107;">
+                    ⚠️ Not authenticated. <a href="/api-auth/login/">Login</a> to access data.
+                </div>
+            {% endif %}
+
+            <div class="data-container">
+                {% if data %}
+                    {% if data.results %}
+                        <!-- Paginated list view -->
+                        <h3>Results ({{ data.count }} total)</h3>
+                        <pre>{{ data.results|safe }}</pre>
+
+                        {% if data.previous or data.next %}
+                            <div class="pagination">
+                                {% if data.previous %}
+                                    <a href="{{ data.previous }}">← Previous</a>
+                                {% else %}
+                                    <a class="disabled">← Previous</a>
+                                {% endif %}
+
+                                {% if data.next %}
+                                    <a href="{{ data.next }}">Next →</a>
+                                {% else %}
+                                    <a class="disabled">Next →</a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <!-- Single item or list view -->
+                        <pre>{{ data|safe }}</pre>
+                    {% endif %}
+                {% else %}
+                    <div class="no-data">
+                        <p>No data available</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple JSON syntax highlighting
+        document.querySelectorAll('pre').forEach(pre => {
+            let content = pre.textContent;
+            try {
+                let json = JSON.parse(content);
+                let formatted = JSON.stringify(json, null, 2);
+
+                // Simple syntax highlighting
+                formatted = formatted
+                    .replace(/(".*?"):/g, '<span class="json-key">$1</span>:')
+                    .replace(/: (".*?")/g, ': <span class="json-string">$1</span>')
+                    .replace(/: (\d+)/g, ': <span class="json-number">$1</span>')
+                    .replace(/: (true|false)/g, ': <span class="json-boolean">$1</span>')
+                    .replace(/: (null)/g, ': <span class="json-null">$1</span>');
+
+                pre.innerHTML = formatted;
+            } catch(e) {
+                // If not valid JSON, try to parse as object
+                if (content.startsWith('{') || content.startsWith('[')) {
+                    pre.innerHTML = content;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

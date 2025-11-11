@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(psql:*)",
+      "Bash(set:*)",
+      "Bash(dir:*)",
+      "Bash(python -m venv:*)",
+      "Bash(venvScriptspip install django djangorestframework psycopg2-binary)",
+      "Bash(.\\venv\\Scripts\\pip install:*)",
+      "Bash(venv/Scripts/pip install:*)",
+      "Bash(venv/Scripts/django-admin startproject:*)",
+      "Bash(venv/Scripts/python:*)",
+      "Bash(venv/Scripts/pip freeze:*)",
+      "Bash(requirements.txt)",
+      "Bash(taskkill:*)",
+      "Bash(timeout 5 bash:*)",
+      "Bash(curl:*)",
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
