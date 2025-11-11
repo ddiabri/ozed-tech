@@ -1,0 +1,39 @@
+{% extends "ticketing/emails/base_email.html" %}
+
+{% block title %}New Comment - {{ ticket.ticket_number }}{% endblock %}
+
+{% block header %}New Comment on Ticket{% endblock %}
+
+{% block content %}
+<h2>New Comment {% if is_internal %}(Internal Note){% endif %}</h2>
+
+<p>A new {% if is_internal %}internal note{% else %}comment{% endif %} has been added to ticket:</p>
+
+<div class="ticket-info">
+    <h3>{{ ticket.ticket_number }} - {{ ticket.subject }}</h3>
+
+    <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="status-badge status-{{ ticket.status }}">{{ ticket.get_status_display }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Priority:</span>
+        <span class="value priority-{{ ticket.priority }}"><strong>{{ ticket.get_priority_display }}</strong></span>
+    </div>
+</div>
+
+<div style="background-color: {% if is_internal %}#fff3cd{% else %}#d1ecf1{% endif %}; padding: 15px; border-left: 4px solid {% if is_internal %}#ffc107{% else %}#17a2b8{% endif %}; border-radius: 4px; margin: 20px 0;">
+    <strong>{% if comment.author %}{{ comment.author.get_full_name|default:comment.author.username }}{% else %}System{% endif %} commented:</strong>
+    <p style="margin: 10px 0 0 0;">{{ comment.content|linebreaks }}</p>
+    <p style="color: #6c757d; font-size: 12px; margin: 10px 0 0 0;">
+        {{ comment.created_at|date:"F d, Y g:i A" }}
+    </p>
+</div>
+
+<a href="{{ site_url }}/admin/ticketing/ticket/{{ ticket.id }}/" class="button">View Ticket</a>
+
+<p style="color: #6c757d; font-size: 14px;">
+    <em>Ticket Reference: {{ ticket.ticket_number }}</em>
+</p>
+{% endblock %}

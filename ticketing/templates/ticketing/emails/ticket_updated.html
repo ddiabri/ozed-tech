@@ -1,0 +1,47 @@
+{% extends "ticketing/emails/base_email.html" %}
+
+{% block title %}Ticket Updated - {{ ticket.ticket_number }}{% endblock %}
+
+{% block header %}Ticket Updated{% endblock %}
+
+{% block content %}
+<h2>Ticket Update</h2>
+
+<p>Your ticket has been updated:</p>
+
+<div class="ticket-info">
+    <h3>{{ ticket.ticket_number }} - {{ ticket.subject }}</h3>
+
+    <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="status-badge status-{{ ticket.status }}">{{ ticket.get_status_display }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Priority:</span>
+        <span class="value priority-{{ ticket.priority }}"><strong>{{ ticket.get_priority_display }}</strong></span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Last Updated:</span>
+        <span class="value">{{ ticket.updated_at|date:"F d, Y g:i A" }}</span>
+    </div>
+</div>
+
+{% if changed_fields %}
+<div style="background-color: #d1ecf1; padding: 15px; border-left: 4px solid #17a2b8; border-radius: 4px; margin: 20px 0;">
+    <strong>Changes Made:</strong>
+    <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+    {% for field, values in changed_fields.items %}
+        <li>{{ field }}: {{ values.old }} → {{ values.new }}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<a href="{{ site_url }}/admin/ticketing/ticket/{{ ticket.id }}/" class="button">View Ticket</a>
+
+<p style="color: #6c757d; font-size: 14px;">
+    <em>Ticket Reference: {{ ticket.ticket_number }}</em>
+</p>
+{% endblock %}

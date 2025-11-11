@@ -1,0 +1,49 @@
+{% extends "ticketing/emails/base_email.html" %}
+
+{% block title %}Ticket Resolved - {{ ticket.ticket_number }}{% endblock %}
+
+{% block header %}Ticket Resolved{% endblock %}
+
+{% block content %}
+<h2>Good News!</h2>
+
+<p>Your support ticket has been resolved:</p>
+
+<div class="ticket-info">
+    <h3>{{ ticket.ticket_number }} - {{ ticket.subject }}</h3>
+
+    <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="status-badge status-resolved">Resolved</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Resolved On:</span>
+        <span class="value">{{ ticket.resolved_at|date:"F d, Y g:i A" }}</span>
+    </div>
+
+    {% if ticket.resolution_time %}
+    <div class="info-row">
+        <span class="label">Resolution Time:</span>
+        <span class="value">{{ ticket.resolution_time|floatformat:1 }} hours</span>
+    </div>
+    {% endif %}
+</div>
+
+<div style="background-color: #d4edda; padding: 15px; border-left: 4px solid #28a745; border-radius: 4px; margin: 20px 0;">
+    <p style="margin: 0; color: #155724;">
+        <strong>Your issue has been resolved.</strong> If you have any questions or if the issue persists, please let us know by replying to this ticket.
+    </p>
+</div>
+
+<a href="{{ site_url }}/admin/ticketing/ticket/{{ ticket.id }}/" class="button">View Ticket</a>
+
+<p style="color: #6c757d; font-size: 14px;">
+    <em>Ticket Reference: {{ ticket.ticket_number }}</em>
+</p>
+
+<p style="font-size: 14px; margin-top: 30px;">
+    <strong>Was this resolution helpful?</strong><br>
+    We value your feedback and would love to hear about your experience.
+</p>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "ticketing/emails/base_email.html" %}
+
+{% block title %}OVERDUE Ticket - {{ ticket.ticket_number }}{% endblock %}
+
+{% block header %}⚠️ Overdue Ticket Alert{% endblock %}
+
+{% block content %}
+<h2 style="color: #dc3545;">Overdue Ticket Alert</h2>
+
+<p>The following ticket is now overdue and requires immediate attention:</p>
+
+<div class="ticket-info" style="border-left-color: #dc3545;">
+    <h3>{{ ticket.ticket_number }} - {{ ticket.subject }}</h3>
+
+    <div class="info-row">
+        <span class="label">Customer:</span>
+        <span class="value">{{ ticket.customer.company_name }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="status-badge status-{{ ticket.status }}">{{ ticket.get_status_display }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Priority:</span>
+        <span class="value priority-{{ ticket.priority }}"><strong>{{ ticket.get_priority_display }}</strong></span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Due Date:</span>
+        <span class="value" style="color: #dc3545; font-weight: bold;">{{ ticket.due_date|date:"F d, Y" }} (PAST DUE)</span>
+    </div>
+
+    {% if ticket.assigned_to %}
+    <div class="info-row">
+        <span class="label">Assigned To:</span>
+        <span class="value">{{ ticket.assigned_to.get_full_name|default:ticket.assigned_to.username }}</span>
+    </div>
+    {% endif %}
+
+    <div class="info-row">
+        <span class="label">Created:</span>
+        <span class="value">{{ ticket.created_at|date:"F d, Y g:i A" }}</span>
+    </div>
+</div>
+
+<div style="background-color: #f8d7da; padding: 15px; border-left: 4px solid #dc3545; border-radius: 4px; margin: 20px 0;">
+    <p style="margin: 0; color: #721c24;">
+        <strong>Action Required:</strong> This ticket has passed its due date and needs immediate attention. Please review and update the ticket status as soon as possible.
+    </p>
+</div>
+
+<a href="{{ site_url }}/admin/ticketing/ticket/{{ ticket.id }}/" class="button" style="background-color: #dc3545;">View Ticket Immediately</a>
+
+<p style="color: #6c757d; font-size: 14px;">
+    <em>Ticket Reference: {{ ticket.ticket_number }}</em>
+</p>
+{% endblock %}

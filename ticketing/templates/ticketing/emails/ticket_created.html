@@ -1,0 +1,72 @@
+{% extends "ticketing/emails/base_email.html" %}
+
+{% block title %}New Ticket Created - {{ ticket.ticket_number }}{% endblock %}
+
+{% block header %}New Support Ticket Created{% endblock %}
+
+{% block content %}
+<h2>Hello{% if customer %}, {{ customer.company_name }}{% endif %}!</h2>
+
+<p>A new support ticket has been created:</p>
+
+<div class="ticket-info">
+    <h3>Ticket Details</h3>
+
+    <div class="info-row">
+        <span class="label">Ticket Number:</span>
+        <span class="value"><strong>{{ ticket.ticket_number }}</strong></span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Subject:</span>
+        <span class="value">{{ ticket.subject }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="status-badge status-{{ ticket.status }}">{{ ticket.get_status_display }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Priority:</span>
+        <span class="value priority-{{ ticket.priority }}"><strong>{{ ticket.get_priority_display }}</strong></span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Category:</span>
+        <span class="value">{{ ticket.get_category_display }}</span>
+    </div>
+
+    {% if ticket.assigned_to %}
+    <div class="info-row">
+        <span class="label">Assigned To:</span>
+        <span class="value">{{ ticket.assigned_to.get_full_name|default:ticket.assigned_to.username }}</span>
+    </div>
+    {% endif %}
+
+    {% if ticket.due_date %}
+    <div class="info-row">
+        <span class="label">Due Date:</span>
+        <span class="value">{{ ticket.due_date|date:"F d, Y" }}</span>
+    </div>
+    {% endif %}
+
+    <div class="info-row">
+        <span class="label">Created:</span>
+        <span class="value">{{ ticket.created_at|date:"F d, Y g:i A" }}</span>
+    </div>
+</div>
+
+<div style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0;">
+    <strong>Description:</strong>
+    <p style="margin: 10px 0 0 0;">{{ ticket.description|linebreaks }}</p>
+</div>
+
+<p>We will review your ticket and get back to you as soon as possible.</p>
+
+<a href="{{ site_url }}/admin/ticketing/ticket/{{ ticket.id }}/" class="button">View Ticket</a>
+
+<p style="color: #6c757d; font-size: 14px;">
+    <em>Ticket Reference: {{ ticket.ticket_number }}</em>
+</p>
+{% endblock %}

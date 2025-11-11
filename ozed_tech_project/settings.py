@@ -196,3 +196,21 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
+
+# Email Configuration
+# For development, use console backend (prints emails to console)
+# For production, configure SMTP settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Development
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Production
+
+# SMTP Settings (for production)
+# EMAIL_HOST = 'smtp.gmail.com'  # Or your SMTP server
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@example.com'
+# EMAIL_HOST_PASSWORD = 'your-app-password'
+DEFAULT_FROM_EMAIL = 'noreply@ozedtech.com'
+SERVER_EMAIL = 'server@ozedtech.com'
+
+# Site URL for email links
+SITE_URL = 'http://localhost:8000'  # Update for production

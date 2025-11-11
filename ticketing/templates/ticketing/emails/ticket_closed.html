@@ -1,0 +1,44 @@
+{% extends "ticketing/emails/base_email.html" %}
+
+{% block title %}Ticket Closed - {{ ticket.ticket_number }}{% endblock %}
+
+{% block header %}Ticket Closed{% endblock %}
+
+{% block content %}
+<h2>Ticket Closed</h2>
+
+<p>Your support ticket has been closed:</p>
+
+<div class="ticket-info">
+    <h3>{{ ticket.ticket_number }} - {{ ticket.subject }}</h3>
+
+    <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="status-badge status-closed">Closed</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Created On:</span>
+        <span class="value">{{ ticket.created_at|date:"F d, Y g:i A" }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Closed On:</span>
+        <span class="value">{{ ticket.closed_at|date:"F d, Y g:i A" }}</span>
+    </div>
+</div>
+
+<div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #6c757d; border-radius: 4px; margin: 20px 0;">
+    <p style="margin: 0; color: #495057;">
+        This ticket is now closed. If you need further assistance, please create a new ticket.
+    </p>
+</div>
+
+<p style="font-size: 14px; margin-top: 30px;">
+    Thank you for using Ozed Tech Support. We're always here to help!
+</p>
+
+<p style="color: #6c757d; font-size: 14px;">
+    <em>Ticket Reference: {{ ticket.ticket_number }}</em>
+</p>
+{% endblock %}

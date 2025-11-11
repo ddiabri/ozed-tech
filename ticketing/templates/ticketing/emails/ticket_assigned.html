@@ -1,0 +1,54 @@
+{% extends "ticketing/emails/base_email.html" %}
+
+{% block title %}Ticket Assigned - {{ ticket.ticket_number }}{% endblock %}
+
+{% block header %}Ticket Assigned to You{% endblock %}
+
+{% block content %}
+<h2>Hello, {{ assigned_to.get_full_name|default:assigned_to.username }}!</h2>
+
+<p>A ticket has been assigned to you:</p>
+
+<div class="ticket-info">
+    <h3>Ticket Details</h3>
+
+    <div class="info-row">
+        <span class="label">Ticket Number:</span>
+        <span class="value"><strong>{{ ticket.ticket_number }}</strong></span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Subject:</span>
+        <span class="value">{{ ticket.subject }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Customer:</span>
+        <span class="value">{{ ticket.customer.company_name }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Status:</span>
+        <span class="status-badge status-{{ ticket.status }}">{{ ticket.get_status_display }}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Priority:</span>
+        <span class="value priority-{{ ticket.priority }}"><strong>{{ ticket.get_priority_display }}</strong></span>
+    </div>
+
+    {% if ticket.due_date %}
+    <div class="info-row">
+        <span class="label">Due Date:</span>
+        <span class="value">{{ ticket.due_date|date:"F d, Y" }}</span>
+    </div>
+    {% endif %}
+</div>
+
+<div style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0;">
+    <strong>Description:</strong>
+    <p style="margin: 10px 0 0 0;">{{ ticket.description|linebreaks }}</p>
+</div>
+
+<a href="{{ site_url }}/admin/ticketing/ticket/{{ ticket.id }}/" class="button">View & Manage Ticket</a>
+{% endblock %}
