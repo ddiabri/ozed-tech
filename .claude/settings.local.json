@@ -17,7 +17,16 @@
       "Bash(curl:*)",
       "Bash(git init:*)",
       "Bash(git config:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh:*)",
+      "Bash(winget install:*)",
+      "Bash(\"C:\\Program Files\\GitHub CLI\\gh.exe\" auth login)",
+      "Bash(\"C:\\Program Files\\GitHub CLI\\gh.exe\" repo create ozed-tech --private --source=. --remote=origin --push --description \"Comprehensive Django-based business management system with inventory, CRM, ticketing, and session security\")",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(\"C:\\Program Files\\GitHub CLI\\gh.exe\" repo edit --default-branch main)",
+      "Bash(\"C:\\Program Files\\GitHub CLI\\gh.exe\" repo view --web)"
     ],
     "deny": [],
     "ask": []

@@ -1,7 +1,12 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
+
+
+def get_default_expiration_date():
+    """Return default expiration date (30 days from today)"""
+    return date.today() + timedelta(days=30)
 
 
 class Category(models.Model):
@@ -331,7 +336,7 @@ class Quote(models.Model):
 
     # Dates
     quote_date = models.DateField(default=date.today)
-    expiration_date = models.DateField(help_text="Quote expires after this date")
+    expiration_date = models.DateField(default=get_default_expiration_date, help_text="Quote expires after this date")
 
     # Pricing
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
@@ -367,6 +372,8 @@ class Quote(models.Model):
     def is_expired(self):
         """Check if quote has expired"""
         from django.utils import timezone
+        if not self.expiration_date:
+            return False
         return date.today() > self.expiration_date and self.status not in ['accepted', 'converted', 'rejected']
 
     @property
