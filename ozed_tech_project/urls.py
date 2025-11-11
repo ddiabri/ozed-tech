@@ -23,6 +23,11 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from .session_views import session_status, SessionManagementView, extend_session
 
+# Customize admin site
+admin.site.site_header = "Ozed-Tech Administration"
+admin.site.site_title = "Ozed-Tech Admin"
+admin.site.index_title = "Welcome to Ozed-Tech Management Portal"
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
